@@ -1,5 +1,7 @@
 import './App.css';
-import {useState} from "react"
+import {useEffect, useState} from "react"
+import image1 from "./images/image1.jpg";
+import image2 from "./images/image2.png";
 
 function App() {
 
@@ -32,9 +34,40 @@ function App() {
       </div> */}
 
       {/* <StateFunction></StateFunction> */}
-      {
+      {/* {
         countries.map(country => <Country name={country.name} capital={country.capital}></Country>)
+      } */}
+      <LoadUsers></LoadUsers>
+      <MyComponent title="My Own Component 1" src1={image1}></MyComponent>
+      <MyComponent title="My Own Component 2" src1={image2}></MyComponent>
+    </div>
+  );
+}
+
+
+function LoadUsers(){
+  const [users, setUsers] = useState([]);
+
+  useEffect( ()=>{
+    fetch('https://jsonplaceholder.typicode.com/users')
+    .then(res => res.json())
+    .then(data => setUsers(data))
+  } , [])
+
+  return(
+    <div>
+      <h1>Users Loaded: {users.length}</h1>
+      {
+        users.map(user => <User name={user.name}></User>)
       }
+    </div>
+  );
+}
+
+function User(props){
+  return(
+    <div>
+      <h2>Name: {props.name}</h2>
     </div>
   );
 }
@@ -90,6 +123,21 @@ function Country(props){
     <div style={countryStyle}>
       <h1>Country: {props.name}</h1>
       <h1>Capital: {props.capital}</h1>
+    </div>
+  );
+}
+
+function MyComponent(props){
+  const [points, setPoints] = useState(0);
+  const handleAddPoints = () => setPoints(points+1);
+  const handleSubtractPoints = () => setPoints(points-1);
+  return (
+    <div>
+      <img src={props.src1} alt="a" height="200px" width="200px" />
+      <h1>{props.title}</h1>
+      <p>Points: {points}</p>
+      <button onClick={handleAddPoints}>Add Points</button>
+      <button onClick={handleSubtractPoints}>Subtract Points</button>
     </div>
   );
 }
